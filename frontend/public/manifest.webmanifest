@@ -1,0 +1,14 @@
+{
+  "name": "Mi Nube",
+  "short_name": "Mi Nube",
+  "description": "Tu agenda, gastos, recordatorios y fotos en un solo lugar.",
+  "lang": "es",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d0f1e",
+  "theme_color": "#0d0f1e",
+  "icons": [
+    { "src": "/icono-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icono-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

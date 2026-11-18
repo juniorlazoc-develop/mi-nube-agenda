@@ -1,0 +1,44 @@
+# Todo Mi Nube en el servidor. Se enciende con:  docker compose up -d --build
+#
+#   Internet -> caddy (HTTPS, puertos 80 y 443) -> web (FastAPI + React) -> volumen "datos"
+#
+# "web" no publica ningún puerto: desde internet solo se puede llegar pasando por Caddy.
+services:
+  web:
+    build: .
+    restart: unless-stopped
+    environment:
+      TZ: America/Lima # sin esto, "hoy" cambiaría a las 7 p. m. (el servidor usa hora UTC)
+    volumes:
+      - datos:/datos
+
+  # Saca una copia de la base de datos al arrancar y luego una vez al día.
+  respaldos:
+    build: .
+    restart: unless-stopped
+    environment:
+      TZ: America/Lima
+    command: sh -c "while true; do python -m app.respaldo; sleep 86400; done"
+    volumes:
+      - datos:/datos
+    depends_on:
+      - web
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      MI_NUBE_DOMINIO: ${MI_NUBE_DOMINIO:?Falta MI_NUBE_DOMINIO en el archivo .env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_certificados:/data
+    depends_on:
+      - web
+
+# Los volúmenes sobreviven aunque se borren y reconstruyan las cajas.
+volumes:
+  datos:
+  caddy_certificados:

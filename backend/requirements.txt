@@ -1,0 +1,7 @@
+# Dependencias del backend (instálalas con: pip install -r requirements.txt)
+fastapi[standard]>=0.115   # Framework web + servidor de desarrollo (comando "fastapi dev")
+sqlmodel>=0.0.22           # ORM: trabajar la base de datos con clases de Python
+pytest>=8                  # Pruebas automáticas
+pyjwt>=2.9                 # Tokens JWT: el "pase" que te da el login
+pwdlib[argon2]>=0.2        # Hash seguro de contraseñas (Argon2)
+pillow>=11                 # Abrir fotos, comprobar que son imágenes y crear miniaturas

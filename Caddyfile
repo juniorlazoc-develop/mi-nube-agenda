@@ -1,0 +1,12 @@
+# Caddy es el portero: recibe a los visitantes y les abre la puerta a Mi Nube.
+# Consigue y renueva solo el certificado HTTPS (el candadito) para tu dominio.
+{$MI_NUBE_DOMINIO} {
+	encode gzip
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "no-referrer"
+	}
+	reverse_proxy web:8000
+}

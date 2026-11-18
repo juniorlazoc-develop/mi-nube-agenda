@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# Datos personales (NUNCA subir a GitHub)
+backend/data/
+backend/uploads/
+.env
+
+# Node / React (Etapa 2)
+node_modules/
+dist/

@@ -1,0 +1,14 @@
+# Lo que NUNCA debe entrar a la imagen de Docker.
+# Lo más importante: tus datos personales y secretos.
+backend/data/
+backend/uploads/
+.env
+**/.env
+
+# Cosas que se regeneran dentro de la imagen
+.git/
+**/.venv/
+**/__pycache__/
+**/.pytest_cache/
+frontend/node_modules/
+frontend/dist/

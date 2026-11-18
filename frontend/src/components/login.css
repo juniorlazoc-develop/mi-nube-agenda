@@ -1,0 +1,321 @@
+/* =====================================================================
+   Pantalla de acceso con tema "Noche de glicinias".
+   Las capas del paisaje se mueven distinto con el mouse (parallax), y todas
+   las animaciones son CSS puro (@keyframes). Si tu sistema tiene "reducir
+   movimiento" activado, se apagan (al final de este archivo).
+   ===================================================================== */
+
+.login-escena {
+  --mx: 0; /* posición del mouse de -1 a 1 (la pone Login.jsx) */
+  --my: 0;
+  position: fixed;
+  inset: 0;
+  overflow-y: auto; /* en pantallas muy bajitas se puede bajar */
+  background: #090a1a;
+  color: #f6f1ff;
+}
+
+.login-fondo { position: fixed; inset: 0; overflow: hidden; pointer-events: none; }
+
+/* ===== Paisaje ===== */
+.paisaje { position: absolute; inset: 0; width: 100%; height: 100%; }
+.capa { transition: transform 0.5s ease-out; }
+.capa-luna { transform: translate(calc(var(--mx) * -6px), calc(var(--my) * -4px)); }
+.capa-lejos { transform: translate(calc(var(--mx) * -10px), 0); }
+.capa-media { transform: translate(calc(var(--mx) * -18px), 0); }
+.capa-cerca { transform: translate(calc(var(--mx) * -28px), 0); }
+
+/* ===== Glicinias: cada racimo se mece a su propio ritmo ===== */
+.login-glicinias { position: absolute; top: 0; left: 0; width: 100%; height: clamp(170px, 34vh, 330px); }
+.glicinias-rama { fill: none; stroke: #3a2c5e; stroke-width: 7; stroke-linecap: round; }
+.glicinias-rama.fina { stroke-width: 1.6; stroke: #6e5a99; }
+.racimo { animation: mecer 7s ease-in-out infinite alternate; animation-delay: var(--retraso); }
+@keyframes mecer {
+  from { transform: rotate(-1.6deg); }
+  to   { transform: rotate(1.6deg); }
+}
+
+/* ===== Pétalos que caen dando vueltas ===== */
+.petalo {
+  position: absolute;
+  top: -24px;
+  left: var(--izquierda);
+  width: var(--tamano);
+  height: calc(var(--tamano) * 0.68);
+  border-radius: 80% 15% 80% 15%;
+  background: linear-gradient(135deg, #e8dbfb, #9c78de);
+  opacity: 0.85;
+  animation: caer var(--duracion) linear infinite;
+  animation-delay: var(--retraso);
+}
+@keyframes caer {
+  to { transform: translate(120px, 108vh) rotate(var(--giro)); opacity: 0.25; }
+}
+
+/* ===== Distribución: lema a la izquierda, tarjeta a la derecha ===== */
+.login-contenido {
+  position: relative;
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(40px, 8vw, 120px);
+  padding: 24px 16px;
+}
+.login-lema {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: end;
+  gap: 8px 16px;
+  text-shadow: 0 2px 22px rgba(9, 10, 26, 0.9);
+  animation: aparecer 1.2s ease both;
+}
+.vertical {
+  writing-mode: vertical-rl;
+  margin: 0;
+  font-family: var(--letra-titulos);
+  font-weight: 700;
+  font-size: clamp(3.6rem, 8vh, 5.4rem);
+  letter-spacing: 0.14em;
+  color: #fbf6ea;
+}
+.login-sello { --lado: 54px; margin-bottom: 8px; }
+.login-lema p {
+  grid-column: span 2;
+  margin: 12px 0 0;
+  font-family: var(--letra-titulos);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #ded3f2;
+}
+
+/* ===== Tarjeta de laca con filo dorado ===== */
+.login-tarjeta {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  padding: 0 32px 26px;
+  border-radius: 6px;
+  background: rgba(13, 13, 31, 0.8);
+  border: 1px solid rgba(217, 183, 113, 0.6);
+  outline: 1px solid rgba(217, 183, 113, 0.22);
+  outline-offset: 5px;
+  box-shadow: 0 34px 90px rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(14px) saturate(130%); /* el efecto "vidrio esmerilado" */
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
+  text-align: center;
+  overflow: hidden;
+  animation: subir 0.9s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+@keyframes subir {
+  from { opacity: 0; transform: translateY(36px); }
+  to   { opacity: 1; }
+}
+
+/* Banda de cuadros "ichimatsu", un patrón tradicional japonés de hace siglos.
+   Un degradado cónico de cuatro partes dibuja cada par de cuadros. */
+.ichimatsu {
+  height: 16px;
+  margin: 0 -32px 22px;
+  background: conic-gradient(#3b2f69 25%, #12122b 0 50%, #3b2f69 0 75%, #12122b 0) 0 0 / 16px 16px;
+  border-bottom: 1px solid rgba(217, 183, 113, 0.6);
+}
+
+/* Contraseña incorrecta -> tiembla (React cambia el "key" para repetirlo) */
+.login-tarjeta[data-temblor="true"] { animation: temblar 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
+@keyframes temblar {
+  10%, 90% { translate: -2px 0; }
+  20%, 80% { translate: 4px 0; }
+  30%, 50%, 70% { translate: -8px 0; }
+  40%, 60% { translate: 8px 0; }
+}
+
+.login-kanji { margin: 0; font-family: var(--letra-titulos); font-size: 0.82rem; letter-spacing: 0.3em; color: #d9b771; }
+.login-titulo {
+  margin: 4px 0 2px;
+  font-family: var(--letra-titulos);
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #fbf6ea;
+}
+.login-sub { margin: 0 0 22px; color: #cfc4e6; font-size: 0.95rem; min-height: 1.4em; }
+
+.login-form { display: flex; flex-direction: column; gap: 14px; text-align: left; }
+
+/* ===== Campos con etiqueta flotante ===== */
+.campo {
+  position: relative;
+  display: block;
+  animation: aparecer 0.6s ease both;
+  animation-delay: calc(0.15s + var(--orden) * 0.08s); /* aparecen uno tras otro */
+}
+@keyframes aparecer { from { opacity: 0; transform: translateY(12px); } }
+
+.campo input {
+  width: 100%;
+  padding: 22px 44px 8px 14px;
+  border-radius: 4px;
+  border: 1px solid rgba(201, 182, 236, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.campo input:focus {
+  border-color: #b79ced;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(183, 156, 237, 0.3);
+}
+/* El navegador pinta de claro los campos que autocompleta: esto los mantiene oscuros. */
+.campo input:-webkit-autofill {
+  -webkit-text-fill-color: #fff;
+  box-shadow: 0 0 0 40px #1a1833 inset;
+  caret-color: #fff;
+}
+.campo-etiqueta {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  translate: 0 -50%;
+  color: #bdb2d6;
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+/* Si hay foco o texto escrito, la etiqueta se achica y sube */
+.campo input:focus + .campo-etiqueta,
+.campo input:not(:placeholder-shown) + .campo-etiqueta {
+  top: 13px;
+  font-size: 0.72rem;
+  color: #d9b771;
+  letter-spacing: 0.06em;
+}
+.ver-clave {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  translate: 0 -50%;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: transparent;
+  color: #cfc4e6;
+  border-radius: 4px;
+}
+.ver-clave:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+
+/* ===== Medidor de fuerza ===== */
+.fuerza { display: flex; flex-direction: column; gap: 6px; font-size: 0.78rem; color: #cfc4e6; }
+.fuerza-barras { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+.fuerza-barras span { height: 4px; background: rgba(255, 255, 255, 0.15); transition: background 0.3s; }
+.fuerza[data-nivel="1"] .llena { background: #ff6b6b; }
+.fuerza[data-nivel="2"] .llena { background: #ffb547; }
+.fuerza[data-nivel="3"] .llena { background: #7fd36b; }
+.fuerza[data-nivel="4"] .llena { background: #30d48c; }
+
+.login-aviso, .login-error { margin: 0; font-size: 0.85rem; border-radius: 4px; padding: 8px 12px; }
+.login-aviso { background: rgba(255, 181, 71, 0.16); color: #ffd79a; }
+.login-error { background: rgba(216, 67, 78, 0.22); color: #ffc9cc; animation: aparecer 0.3s ease; }
+
+/* ===== Botón con el filo de una hoja que pasa ===== */
+.login-boton {
+  position: relative;
+  overflow: hidden;
+  margin-top: 4px;
+  height: 50px;
+  border-radius: 4px;
+  font-family: var(--letra-titulos);
+  font-size: 1.08rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #fff;
+  background: linear-gradient(135deg, #c8313f, #8e1524);
+  box-shadow: 0 10px 25px rgba(142, 21, 36, 0.45);
+  transition: transform 0.15s, box-shadow 0.2s, filter 0.2s;
+  animation: aparecer 0.6s ease both;
+  animation-delay: 0.5s;
+}
+.login-boton::after {
+  content: "";
+  position: absolute;
+  inset: -40% auto -40% 0;
+  width: 2px;
+  background: #fff;
+  box-shadow: 0 0 14px 4px rgba(255, 255, 255, 0.7);
+  rotate: 18deg;
+  translate: -20px 0;
+  animation: filo 3.6s ease-in-out infinite;
+}
+@keyframes filo { 60%, 100% { translate: 420px 0; } }
+.login-boton:hover:not(:disabled) { filter: brightness(1.12); transform: translateY(-2px); }
+.login-boton:active:not(:disabled) { transform: translateY(0) scale(0.98); }
+.login-boton:disabled { opacity: 0.55; }
+.login-boton:disabled::after { display: none; }
+
+.girando {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  border: 3px solid rgba(255, 255, 255, 0.25);
+  border-top-color: #fff;
+  border-radius: 50%;
+  vertical-align: middle;
+  animation: girar 0.7s linear infinite;
+}
+@keyframes girar { to { transform: rotate(360deg); } }
+
+.login-pie { margin: 18px 0 0; font-size: 0.8rem; color: #b3a8cc; }
+
+/* ===== Al entrar: el sello se estampa y un corte de luz cruza la pantalla ===== */
+.login-exito { padding: 26px 0 14px; }
+.login-exito h2 { margin: 18px 0 4px; font-family: var(--letra-titulos); animation: aparecer 0.5s 0.3s ease both; }
+.login-exito p { margin: 0; color: #cfc4e6; animation: aparecer 0.5s 0.45s ease both; }
+.sello-exito { --lado: 76px; animation: estampar 0.45s cubic-bezier(0.2, 1.5, 0.4, 1) both; }
+@keyframes estampar {
+  from { transform: scale(2.4) rotate(-14deg); opacity: 0; }
+  to   { transform: rotate(-4deg); opacity: 1; }
+}
+
+.corte {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 180vmax;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #fff 20%, #fff 80%, transparent);
+  box-shadow: 0 0 30px 8px rgba(232, 219, 251, 0.9);
+  rotate: -24deg;
+  translate: -50% -50%;
+  animation: cortar 0.55s 0.7s ease-in both;
+  pointer-events: none;
+}
+@keyframes cortar {
+  0%   { scale: 0 1; opacity: 1; }
+  55%  { scale: 1 1; opacity: 1; }
+  100% { scale: 1 90; opacity: 0; }
+}
+.con-exito .login-contenido { animation: desvanecer 0.5s 1s ease forwards; }
+@keyframes desvanecer { to { opacity: 0; } }
+
+/* ===== Pantallas angostas: solo la tarjeta, con un lema pequeño arriba ===== */
+@media (max-width: 860px) {
+  .login-contenido { flex-direction: column; gap: 18px; }
+  .login-lema { display: flex; align-items: center; gap: 12px; margin-top: 40px; }
+  .login-lema p { display: none; }
+  .vertical { writing-mode: horizontal-tb; font-size: 1.7rem; }
+  .login-sello { --lado: 36px; margin: 0; }
+}
+@media (max-width: 420px) {
+  .login-tarjeta { padding: 0 20px 22px; }
+  .ichimatsu { margin: 0 -20px 20px; }
+}
+
+/* ===== Accesibilidad: sin movimiento si el sistema lo pide ===== */
+@media (prefers-reduced-motion: reduce) {
+  .login-escena *, .login-escena *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+  .petalo { display: none; }
+  .capa { transform: none; }
+}
