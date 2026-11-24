@@ -111,8 +111,8 @@ export default function Ajustes({ usuario, onUsuario, onSalir }) {
         <h2 className="titulo-seccion">Apariencia</h2>
         <div className="opciones-tema">
           {[
-            ["noche", "Noche", "Índigo y glicinias"],
-            ["dia", "Día", "Papel washi"],
+            ["noche", "Oscuro", "Grafito con acentos azules"],
+            ["dia", "Claro", "Fondo blanco, ideal de día"],
           ].map(([valor, titulo, detalle]) => (
             <button
               key={valor}

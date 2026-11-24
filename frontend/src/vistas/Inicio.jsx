@@ -6,19 +6,20 @@ import { useCallback, useEffect, useState } from "react";
 
 import { api, inicio } from "../api.js";
 import AvisoError from "../components/AvisoError.jsx";
+import { Icono } from "../components/Iconos.jsx";
 import ImagenPrivada from "../components/ImagenPrivada.jsx";
 import { aTexto, cuandoEs, fechaBonita, fechaHoraDe, hoy, soles } from "../fechas.js";
 
-// Refranes japoneses (kotowaza). Cada día toca uno distinto.
-const REFRANES = [
-  ["七転び八起き", "Cae siete veces, levántate ocho."],
-  ["千里の道も一歩から", "Un viaje de mil leguas empieza con un paso."],
-  ["継続は力なり", "La constancia es fuerza."],
-  ["石の上にも三年", "Hasta una piedra se calienta si te sientas tres años en ella."],
-  ["一期一会", "Cada encuentro ocurre una sola vez en la vida."],
-  ["塵も積もれば山となる", "Hasta el polvo, acumulado, forma una montaña."],
-  ["雨降って地固まる", "Después de la lluvia, la tierra se afirma."],
-  ["明日は明日の風が吹く", "Mañana soplará el viento de mañana."],
+// Frases para empezar el día. Cada día toca una distinta.
+const FRASES = [
+  "Poco a poco se llega lejos.",
+  "Más vale paso que dure que trote que canse.",
+  "La constancia vence lo que la suerte no alcanza.",
+  "Hecho es mejor que perfecto.",
+  "Lo que se mide, se mejora.",
+  "Un pendiente menos es un pendiente menos.",
+  "Empieza por lo más pequeño; el resto viene solo.",
+  "Hoy también cuenta.",
 ];
 
 function saludo() {
@@ -72,7 +73,7 @@ export default function Inicio({ usuario, onIr }) {
   }
 
   const diaDelAnio = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86_400_000);
-  const [refran, significado] = REFRANES[diaDelAnio % REFRANES.length];
+  const frase = FRASES[diaDelAnio % FRASES.length];
 
   const ultimosDias = Array.from({ length: 7 }, (_, i) => {
     const dia = new Date();
@@ -94,10 +95,7 @@ export default function Inicio({ usuario, onIr }) {
         <h2>
           {saludo()}, {usuario.nombre.split(" ")[0]}
         </h2>
-        <blockquote>
-          <span lang="ja">{refran}</span>
-          <small>{significado}</small>
-        </blockquote>
+        <p className="portada-frase">{frase}</p>
       </section>
 
       {error && <AvisoError mensaje={error} onReintentar={cargar} />}
@@ -166,9 +164,7 @@ export default function Inicio({ usuario, onIr }) {
                 <ul className="lista-simple">
                   {datos.recordatorios.map((r) => (
                     <li key={r.id} className={fechaHoraDe(r) <= ahora ? "vencido" : ""}>
-                      <span lang="ja" className="mini-kanji" aria-hidden="true">
-                        鈴
-                      </span>
+                      <Icono nombre="avisos" tamano={16} className="mini-icono" />
                       <span>{r.titulo}</span>
                       <time>{cuandoEs(r)}</time>
                     </li>

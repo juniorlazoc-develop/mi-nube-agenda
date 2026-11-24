@@ -4,13 +4,12 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
-// Tipografías guardadas en el proyecto: funcionan sin depender de Google.
-// Solo el alfabeto latino; los kanji vienen de una fuente recortada (ver estilos.css).
-import "@fontsource/shippori-mincho/latin-500.css";
-import "@fontsource/shippori-mincho/latin-700.css";
-import "@fontsource/zen-kaku-gothic-new/latin-400.css";
-import "@fontsource/zen-kaku-gothic-new/latin-500.css";
-import "@fontsource/zen-kaku-gothic-new/latin-700.css";
+// Tipografía Inter guardada en el proyecto: funciona sin depender de Google.
+// Solo el alfabeto latino y los pesos que usamos, para que pese poco.
+import "@fontsource/inter/latin-400.css";
+import "@fontsource/inter/latin-500.css";
+import "@fontsource/inter/latin-600.css";
+import "@fontsource/inter/latin-700.css";
 
 import App from "./App.jsx";
 import "./estilos.css";

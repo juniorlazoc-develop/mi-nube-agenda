@@ -16,7 +16,7 @@ Backend en **Python con FastAPI** y frontend en **React**, con inicio de sesión
 - **Gastos:** registro por categoría, resumen mensual, presupuesto, tendencia de 6 meses y exportación a CSV para Excel.
 - **Fotos:** subida, validación de imágenes, miniaturas, álbumes y favoritas. Las imágenes solo se entregan a usuarios autenticados.
 - **Ajustes:** cambio de contraseña y copia de seguridad de la base de datos.
-- **Diseño propio** "Noche de glicinias", con tema de noche y de día.
+- **Diseño propio** moderno y neutro: tema oscuro (grafito con acentos azules) y tema claro, íconos SVG propios y vista adaptada al celular.
 
 ## Tecnologías
 

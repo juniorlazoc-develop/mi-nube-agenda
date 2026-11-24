@@ -3,7 +3,7 @@
  *
  * Cada 30 segundos pide la lista al backend y la compara con la hora actual.
  * Si algo venció, muestra un aviso en pantalla, una notificación del sistema
- * (si le diste permiso) y hace sonar un "fūrin", la campanita de viento japonesa.
+ * (si le diste permiso) y hace sonar una campanita suave.
  *
  * Importante: esto lo hace el navegador, así que solo funciona con la página abierta.
  */
@@ -11,6 +11,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { recordatorios, RECORDATORIOS_CAMBIARON, avisarCambioRecordatorios } from "../api.js";
 import { fechaHoraDe } from "../fechas.js";
+import { Icono } from "./Iconos.jsx";
 
 const REVISAR_CADA = 30_000;
 
@@ -95,8 +96,8 @@ export default function AvisosRecordatorio({ onVencidos, onIr }) {
     <div className="avisos" role="status" aria-live="polite">
       {visibles.map((r) => (
         <article key={r.id} className="aviso">
-          <span className="aviso-kanji" lang="ja" aria-hidden="true">
-            鈴
+          <span className="aviso-icono">
+            <Icono nombre="avisos" />
           </span>
           <div className="aviso-cuerpo">
             <strong onClick={() => onIr("recordatorios")}>{r.titulo}</strong>
